@@ -1,0 +1,1753 @@
+<html><head><base href="https://bdnc.pt/"><title>BDNC - Padel Rankings</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+  :root {
+    --primary-color: #B8860B;
+    --secondary-color: #FFFFFF;
+    --accent-color: #B22222;
+    --background-color: #F5F5F5;
+    --text-color: #333333;
+    --new-game-btn-color: #2ECC71;
+    --player-btn-color: #B22222;
+    --new-season-btn-color: #DAA520;
+    --money-green: #85bb65;
+  }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    font-size: 16px;
+  }
+
+  .container {
+    background-color: var(--secondary-color);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 1200px;
+    width: 95%;
+  }
+
+  h1, h2, h3 {
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 1.5em;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .logo img {
+    height: 60px;
+    margin-right: 10px;
+  }
+
+  .logo-text {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  .tennis-ball {
+    font-size: 36px;
+    margin-left: 10px;
+  }
+
+  button {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 30px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%;
+  }
+
+  button:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+
+  #newGameBtn {
+    background-color: var(--new-game-btn-color);
+  }
+
+  #newGameBtn:hover {
+    background-color: #27AE60;
+  }
+
+  #newSeasonBtn {
+    background-color: var(--new-season-btn-color);
+  }
+
+  #newSeasonBtn:hover {
+    background-color: #B8860B;
+  }
+
+  #newPlayerBtn, #removePlayerBtn {
+    background-color: var(--player-btn-color);
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  #newPlayerBtn:hover, #removePlayerBtn:hover {
+    background-color: #8B0000;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #E0E0E0;
+  }
+
+  th {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 12px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #F9F9F9;
+  }
+
+  tr:hover {
+    background-color: #F0F0F0;
+  }
+
+  .winner-icon {
+    color: var(--primary-color);
+    margin-right: 5px;
+  }
+
+  .form-indicator {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    margin-right: 2px;
+    text-align: center;
+    line-height: 18px;
+    font-size: 10px;
+    font-weight: bold;
+    color: var(--secondary-color);
+  }
+
+  .form-win {
+    background-color: #2ECC71;
+  }
+
+  .form-draw {
+    background-color: #F1C40F;
+  }
+
+  .form-loss {
+    background-color: #E74C3C;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+  }
+
+  .modal-content {
+    background-color: var(--secondary-color);
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: var(--accent-color);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #gameForm, #newPlayerForm, #removePlayerForm {
+    display: grid;
+    gap: 15px;
+  }
+
+  .player-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+  }
+
+  .player-button {
+    background-color: #E0E0E0;
+    color: var(--text-color);
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 12px;
+  }
+
+  .player-button.selected {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+  }
+
+  .team-display {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .team {
+    background-color: #F0F0F0;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .score-input {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    align-items: center;
+  }
+
+  .set-container {
+    border: 1px solid #E0E0E0;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    position: relative;
+  }
+
+  .remove-set {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--accent-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  .remove-set:hover {
+    background-color: #8B0000;
+  }
+
+  .delete-game {
+    background-color: var(--accent-color);
+    color: var(--secondary-color);
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+
+  .delete-game:hover {
+    background-color: #8B0000;
+  }
+
+  .pote-total {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--money-green);
+    text-align: right;
+    margin-bottom: 15px;
+  }
+
+  .tab {
+    overflow: hidden;
+    border: 1px solid #E0E0E0;
+    background-color: #F9F9F9;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 12px 14px;
+    transition: 0.3s;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    width: auto;
+  }
+
+  .tab button:hover {
+    background-color: #E0E0E0;
+  }
+
+  .tab button.active {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+  }
+
+  .tabcontent {
+    display: none;
+    padding: 20px;
+    border: 1px solid #E0E0E0;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    background-color: var(--secondary-color);
+  }
+
+  input[type="text"], input[type="date"], select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    display: inline-block;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+
+  input[type="text"]:focus, input[type="date"]:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+
+  .winner-score {
+    font-weight: bold;
+  }
+
+  .v-rate {
+    font-weight: bold;
+  }
+
+  .pote-value {
+    color: var(--money-green);
+    font-weight: bold;
+  }
+
+  @media screen and (max-width: 600px) {
+    body {
+      font-size: 14px;
+    }
+
+    .container {
+      padding: 10px;
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+    }
+
+    h1, h2, h3 {
+      font-size: 1.2em;
+    }
+
+    .logo img {
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+    }
+
+    .tennis-ball {
+      font-size: 24px;
+    }
+
+    button, .tab button {
+      padding: 8px 16px;
+      font-size: 12px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    table {
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 8px;
+    }
+
+    .form-indicator {
+      width: 16px;
+      height: 16px;
+      line-height: 16px;
+      font-size: 8px;
+    }
+
+    .modal-content {
+      padding: 15px;
+      width: 95%;
+    }
+
+    .player-button {
+      font-size: 10px;
+    }
+
+    input[type="text"], input[type="date"], select {
+      font-size: 12px;
+    }
+
+    .hide-mobile {
+      display: none;
+    }
+
+    .tab {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tab button {
+      float: none;
+      text-align: center;
+    }
+
+    .tabcontent {
+      padding: 10px;
+    }
+
+    #ranking, #pairsRanking, #headToHead, #pairsHeadToHead, #gameHistory {
+      overflow-x: auto;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="bdnc_logo.png" alt="BDNC Logo" width="60" height="60">
+      <span class="logo-text">BDNC</span>
+      <span class="tennis-ball">🎾</span>
+    </div>
+    
+    <button id="newGameBtn"><i class="fas fa-plus-circle"></i> Novo Jogo</button>
+    <button id="newSeasonBtn"><i class="fas fa-redo"></i> Nova Temporada</button>
+    <button id="newPlayerBtn"><i class="fas fa-user-plus"></i> Novo Jogador</button>
+    <button id="removePlayerBtn"><i class="fas fa-user-minus"></i> Remover Jogador</button>
+
+    <div class="pote-total">Pote Total: <span id="poteTotal" class="pote-value">0.00</span>€</div>
+
+    <div class="tab">
+      <button class="tablinks active" onclick="openTab(event, 'RankingTab')">Ranking</button>
+      <button class="tablinks" onclick="openTab(event, 'ConfrontosTab')">Confrontos</button>
+      <button class="tablinks" onclick="openTab(event, 'HistoricoTab')">Histórico</button>
+    </div>
+
+    <div id="RankingTab" class="tabcontent" style="display: block;">
+      <div id="ranking">
+        <h2>Ranking Individual</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Nome</th>
+              <th>J</th>
+              <th>V%</th>
+              <th>V</th>
+              <th>E</th>
+              <th>D</th>
+              <th class="hide-mobile">SG</th>
+              <th class="hide-mobile">SP</th>
+              <th>DS</th>
+              <th class="hide-mobile">JG</th>
+              <th class="hide-mobile">JP</th>
+              <th>DJ</th>
+              <th class="hide-mobile form-column">Forma</th>
+              <th>Pote</th>
+            </tr>
+          </thead>
+          <tbody id="rankingBody">
+            <!-- O ranking será adicionado aqui dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="pairsRanking">
+        <h2>Ranking por Duplas</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Dupla</th>
+              <th>J</th>
+              <th>V%</th>
+              <th>V</th>
+              <th>E</th>
+              <th>D</th>
+              <th class="hide-mobile">SG</th>
+              <th class="hide-mobile">SP</th>
+              <th>DS</th>
+              <th class="hide-mobile">JG</th>
+              <th class="hide-mobile">JP</th>
+              <th>DJ</th>
+              <th class="hide-mobile form-column">Forma</th>
+            </tr>
+          </thead>
+          <tbody id="pairsRankingBody">
+            <!-- O ranking por duplas será adicionado aqui dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="ConfrontosTab" class="tabcontent">
+      <div id="headToHead">
+        <h2>Confrontos Diretos Individuais</h2>
+        <table>
+          <thead id="headToHeadHeader">
+            <!-- O cabeçalho será adicionado dinamicamente -->
+          </thead>
+          <tbody id="headToHeadBody">
+            <!-- Os dados de confrontos diretos serão adicionados aqui dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="pairsHeadToHead">
+        <h2>Confrontos Diretos por Duplas</h2>
+        <table>
+          <thead id="pairsHeadToHeadHeader">
+            <!-- O cabeçalho será adicionado dinamicamente -->
+          </thead>
+          <tbody id="pairsHeadToHeadBody">
+            <!-- Os dados de confrontos diretos por duplas serão adicionados aqui dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="HistoricoTab" class="tabcontent">
+      <div id="gameHistory">
+        <h2>Histórico de Jogos</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Equipa 1</th>
+              <th>Equipa 2</th>
+              <th>Resultado</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="gameHistoryBody">
+            <!-- O histórico de jogos será adicionado aqui dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="newGameModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Novo Jogo</h2>
+      <form id="gameForm">
+        <div class="player-selection">
+          <!-- Os botões dos jogadores serão adicionados aqui dinamicamente -->
+        </div>
+        
+        <input type="text" id="estrangeiroName" name="estrangeiroName" placeholder="Nome do jogador estrangeiro" style="display:none;">
+        
+        <button type="button" id="sortearEquipas">Sortear Equipas</button>
+
+        <div class="team-display" style="display:none;">
+          <div class="team" id="team1">
+            <h3>Equipa 1</h3>
+            <p id="team1-players"></p>
+          </div>
+          <div class="team" id="team2">
+            <h3>Equipa 2</h3>
+            <p id="team2-players"></p>
+          </div>
+        </div>
+
+        <label for="date">Data do Jogo:</label>
+        <input type="date" id="date" name="date" required>
+
+        <div id="setsContainer">
+          <div class="set-container">
+            <h3>Set 1</h3>
+            <div class="score-input">
+              <label>Equipa 1:</label>
+              <select name="set1team1" required>
+                <option value="">Pontuação</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+              </select>
+              <label>Equipa 2:</label>
+              <select name="set1team2" required>
+                <option value="">Pontuação</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" id="addSetBtn">Adicionar Set</button>
+
+        <button type="submit" id="registarJogo">Registar Jogo</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="newPlayerModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Adicionar Novo Jogador</h2>
+      <form id="newPlayerForm">
+        <label for="newPlayerName">Nome do Novo Jogador:</label>
+        <input type="text" id="newPlayerName" name="newPlayerName" required>
+        <button type="submit">Adicionar Jogador</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="removePlayerModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Remover Jogador</h2>
+      <form id="removePlayerForm">
+        <label for="removePlayerSelect">Selecione o jogador a remover:</label>
+        <select id="removePlayerSelect" name="removePlayerSelect" required>
+          <!-- As opções serão adicionadas dinamicamente -->
+        </select>
+        <button type="submit">Remover Jogador</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // O código JavaScript permanece o mesmo
+  </script>
+</body>
+</html><script>
+    let gameHistory = [];
+    let playerStats = {};
+    let pairsStats = {};
+    let headToHeadStats = {};
+    let pairsHeadToHeadStats = {};
+    let setCount = 1;
+    let selectedPlayers = [];
+    let teamsDrawn = false;
+    let players = ['Lopo', 'Castro', 'Cortez', 'Gaspar', 'Gonçalo'];
+
+    const modal = document.getElementById("newGameModal");
+    const newPlayerModal = document.getElementById("newPlayerModal");
+    const removePlayerModal = document.getElementById("removePlayerModal");
+    const btn = document.getElementById("newGameBtn");
+    const newPlayerBtn = document.getElementById("newPlayerBtn");
+    const removePlayerBtn = document.getElementById("removePlayerBtn");
+    const span = document.getElementsByClassName("close")[0];
+    const newPlayerSpan = document.getElementsByClassName("close")[1];
+    const removePlayerSpan = document.getElementsByClassName("close")[2];
+    const newSeasonBtn = document.getElementById("newSeasonBtn");
+
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+      resetForm();
+    }
+
+    newPlayerBtn.onclick = function() {
+      newPlayerModal.style.display = "block";
+    }
+
+    removePlayerBtn.onclick = function() {
+      updateRemovePlayerSelect();
+      removePlayerModal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    newPlayerSpan.onclick = function() {
+      newPlayerModal.style.display = "none";
+    }
+
+    removePlayerSpan.onclick = function() {
+      removePlayerModal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+      if (event.target == newPlayerModal) {
+        newPlayerModal.style.display = "none";
+      }
+      if (event.target == removePlayerModal) {
+        removePlayerModal.style.display = "none";
+      }
+    }
+
+    newSeasonBtn.onclick = function() {
+      if (confirm("Tem certeza que deseja iniciar uma nova temporada? Todos os jogos e estatísticas serão apagados.")) {
+        gameHistory = [];
+        playerStats = {};
+        pairsStats = {};
+        headToHeadStats = {};
+        pairsHeadToHeadStats = {};
+        updateGameHistoryDisplay();
+        updateRanking();
+        updatePairsRanking();
+        updateHeadToHead();
+        updatePairsHeadToHead();
+        localStorage.removeItem('gameHistory');
+        localStorage.removeItem('playerStats');
+        localStorage.removeItem('pairsStats');
+        localStorage.removeItem('headToHeadStats');
+        localStorage.removeItem('pairsHeadToHeadStats');
+        alert("Nova temporada iniciada com sucesso!");
+      }
+    }
+
+    function updatePlayerButtons() {
+      const playerSelection = document.querySelector('.player-selection');
+      playerSelection.innerHTML = '';
+      players.forEach(player => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'player-button';
+        button.dataset.player = player;
+        button.textContent = player;
+        button.addEventListener('click', function() {
+          if (this.classList.contains('selected')) {
+            this.classList.remove('selected');
+            selectedPlayers = selectedPlayers.filter(p => p !== player);
+          } else {
+            if (selectedPlayers.length < 4) {
+              this.classList.add('selected');
+              selectedPlayers.push(player);
+            } else {
+              alert('Já foram selecionados 4 jogadores.');
+            }
+          }
+          teamsDrawn = false;
+        });
+        playerSelection.appendChild(button);
+      });
+
+      const estrangeiroButton = document.createElement('button');
+      estrangeiroButton.type = 'button';
+      estrangeiroButton.className = 'player-button';
+      estrangeiroButton.dataset.player = 'estrangeiro';
+      estrangeiroButton.textContent = 'Estrangeiro';
+      estrangeiroButton.addEventListener('click', function() {
+        if (this.classList.contains('selected')) {
+          this.classList.remove('selected');
+          selectedPlayers = selectedPlayers.filter(p => p !== 'estrangeiro');
+          document.getElementById('estrangeiroName').style.display = 'none';
+        } else {
+          if (selectedPlayers.length < 4) {
+            this.classList.add('selected');
+            selectedPlayers.push('estrangeiro');
+            document.getElementById('estrangeiroName').style.display = 'block';
+          } else {
+            alert('Já foram selecionados 4 jogadores.');
+          }
+        }
+        teamsDrawn = false;
+      });
+      playerSelection.appendChild(estrangeiroButton);
+    }
+
+    function updateRemovePlayerSelect() {
+      const select = document.getElementById('removePlayerSelect');
+      select.innerHTML = '';
+      players.forEach(player => {
+        const option = document.createElement('option');
+        option.value = player;
+        option.textContent = player;
+        select.appendChild(option);
+      });
+    }
+
+    document.getElementById('sortearEquipas').addEventListener('click', sortearEquipas);
+    document.getElementById('addSetBtn').addEventListener('click', addSet);
+    document.getElementById('gameForm').addEventListener('submit', handleGameSubmission);
+    document.getElementById('newPlayerForm').addEventListener('submit', handleNewPlayerSubmission);
+    document.getElementById('removePlayerForm').addEventListener('submit', handleRemovePlayerSubmission);
+
+    function handleNewPlayerSubmission(e) {
+      e.preventDefault();
+      const newPlayerName = document.getElementById('newPlayerName').value.trim();
+      if (newPlayerName && !players.includes(newPlayerName)) {
+        players.push(newPlayerName);
+        updatePlayerButtons();
+        document.getElementById('newPlayerName').value = '';
+        newPlayerModal.style.display = "none";
+        alert(`Jogador "${newPlayerName}" adicionado com sucesso!`);
+        localStorage.setItem('players', JSON.stringify(players));
+      } else {
+        alert('Nome de jogador inválido ou já existente.');
+      }
+    }
+
+    function handleRemovePlayerSubmission(e) {
+      e.preventDefault();
+      const playerToRemove = document.getElementById('removePlayerSelect').value;
+      if (confirm(`Tem certeza que deseja remover o jogador "${playerToRemove}"?`)) {
+        players = players.filter(player => player !== playerToRemove);
+        delete playerStats[playerToRemove];
+        
+        // Remover o jogador das estatísticas de pares
+        for (let pair in pairsStats) {
+          if (pair.includes(playerToRemove)) {
+            delete pairsStats[pair];
+          }
+        }
+        
+        // Remover o jogador das estatísticas de confrontos diretos
+        delete headToHeadStats[playerToRemove];
+        for (let player in headToHeadStats) {
+          delete headToHeadStats[player][playerToRemove];
+        }
+        
+        // Remover o jogador das estatísticas de confrontos diretos por duplas
+        for (let pair in pairsHeadToHeadStats) {
+          if (pair.includes(playerToRemove)) {
+            delete pairsHeadToHeadStats[pair];
+          } else {
+            for (let oppPair in pairsHeadToHeadStats[pair]) {
+              if (oppPair.includes(playerToRemove)) {
+                delete pairsHeadToHeadStats[pair][oppPair];
+              }
+            }
+          }
+        }
+        
+        updatePlayerButtons();
+        updateRanking();
+        updatePairsRanking();
+        updateHeadToHead();
+        updatePairsHeadToHead();
+        localStorage.setItem('players', JSON.stringify(players));
+        localStorage.setItem('playerStats', JSON.stringify(playerStats));
+        localStorage.setItem('pairsStats', JSON.stringify(pairsStats));
+        localStorage.setItem('headToHeadStats', JSON.stringify(headToHeadStats));
+        localStorage.setItem('pairsHeadToHeadStats', JSON.stringify(pairsHeadToHeadStats));
+        removePlayerModal.style.display = "none";
+        alert(`Jogador "${playerToRemove}" removido com sucesso!`);
+      }
+    }
+
+    function sortearEquipas() {
+      if (selectedPlayers.length !== 4) {
+        alert('Por favor, selecione exatamente 4 jogadores.');
+        return;
+      }
+
+      const shuffledPlayers = [...selectedPlayers];
+      for (let i = shuffledPlayers.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledPlayers[i], shuffledPlayers[j]] = [shuffledPlayers[j], shuffledPlayers[i]];
+      }
+
+      const team1 = shuffledPlayers.slice(0, 2).sort();
+      const team2 = shuffledPlayers.slice(2).sort();
+
+      document.getElementById('team1-players').textContent = team1.join(' / ');
+      document.getElementById('team2-players').textContent = team2.join(' / ');
+
+      document.querySelector('.team-display').style.display = 'grid';
+      teamsDrawn = true;
+    }
+
+    function addSet() {
+      setCount++;
+      const setContainer = document.createElement('div');
+      setContainer.className = 'set-container';
+      setContainer.innerHTML = `
+        <button type="button" class="remove-set" onclick="removeSet(this)">×</button>
+        <h3>Set ${setCount}</h3>
+        <div class="score-input">
+          <label>Equipa 1:</label>
+          <select name="set${setCount}team1" required>
+            <option value="">Pontuação</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+          <label>Equipa 2:</label>
+          <select name="set${setCount}team2" required>
+            <option value="">Pontuação</option>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+        </div>
+      `;
+      document.getElementById('setsContainer').appendChild(setContainer);
+    }
+
+    function removeSet(button) {
+      if (setCount > 1) {
+        const setContainer = button.closest('.set-container');
+        setContainer.remove();
+        setCount--;
+        updateSetNumbers();
+      } else {
+        alert('Não é possível remover o último set.');
+      }
+    }
+
+    function updateSetNumbers() {
+      const setContainers = document.querySelectorAll('.set-container');
+      setContainers.forEach((container, index) => {
+        container.querySelector('h3').textContent = `Set ${index + 1}`;
+        container.querySelector('select[name^="set"]').name = `set${index + 1}team1`;
+        container.querySelector('select[name$="team2"]').name = `set${index + 1}team2`;
+      });
+    }
+
+    function handleGameSubmission(e) {
+      e.preventDefault();
+      
+      if (!teamsDrawn) {
+        alert('Não é possível registar o jogo sem se ter sorteado antes as equipas.');
+        return;
+      }
+
+      const formData = new FormData(e.target);
+      
+      let isValid = true;
+      let team1Score = 0;
+      let team2Score = 0;
+      let setScores = [];
+
+      for (let i = 1; i <= setCount; i++) {
+        const score1 = parseInt(formData.get(`set${i}team1`));
+        const score2 = parseInt(formData.get(`set${i}team2`));
+        
+        if (score1 === score2) {
+          alert(`Erro: As pontuações no Set ${i} não podem ser iguais.`);
+          isValid = false;
+          break;
+        }
+
+        if (score1 < 6 && score2 < 6) {
+          alert(`Erro: No Set ${i}, uma equipa deve atingir pelo menos 6 jogos.`);
+          isValid = false;
+          break;
+        }
+
+        if (Math.max(score1, score2) === 7 && Math.min(score1, score2) < 5) {
+          alert(`Erro: No Set ${i}, se uma equipa tem 7 jogos, a outra deve ter 5 ou 6.`);
+          isValid = false;
+          break;
+        }
+
+        if (score1 > score2) {
+          team1Score++;
+        } else {
+          team2Score++;
+        }
+
+        setScores.push([score1, score2]);
+      }
+
+      if (!isValid) return;
+
+      const date = formData.get('date');
+      const today = new Date().toISOString().split('T')[0];
+      if (date > today) {
+        alert('Erro: Não é possível registar jogos com datas futuras.');
+        return;
+      }
+
+      const team1 = document.getElementById('team1-players').textContent.split(' / ');
+      const team2 = document.getElementById('team2-players').textContent.split(' / ');
+      const result = `${team1Score}-${team2Score}`;
+
+      const estrangeiroName = formData.get('estrangeiroName');
+      if (selectedPlayers.includes('estrangeiro') && estrangeiroName) {
+        if (team1.includes('estrangeiro')) {
+          team1[team1.indexOf('estrangeiro')] = `estrangeiro (${estrangeiroName})`;
+        } else if (team2.includes('estrangeiro')) {
+          team2[team2.indexOf('estrangeiro')] = `estrangeiro (${estrangeiroName})`;
+        }
+      }
+
+      addGameToHistory(date, team1, team2, result, setScores);
+      updatePlayerStats(team1, team2, team1Score, team2Score, setScores);
+      updatePairsStats(team1, team2, team1Score, team2Score, setScores);
+      updateHeadToHeadStats(team1, team2, team1Score, team2Score);
+      updatePairsHeadToHeadStats(team1, team2, team1Score, team2Score);
+
+      resetForm();
+
+      alert('Jogo registado com sucesso!');
+      modal.style.display = "none";
+      updateRanking();
+      updatePairsRanking();
+      updateHeadToHead();
+      updatePairsHeadToHead();
+    }
+
+    function resetForm() {
+      document.getElementById('gameForm').reset();
+      document.querySelector('.team-display').style.display = 'none';
+      setCount = 1;
+      document.getElementById('setsContainer').innerHTML = `
+        <div class="set-container">
+          <h3>Set 1</h3>
+          <div class="score-input">
+            <label>Equipa 1:</label>
+            <select name="set1team1" required>
+              <option value="">Pontuação</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+            <label>Equipa 2:</label>
+            <select name="set1team2" required>
+              <option value="">Pontuação</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+          </div>
+        </div>
+      `;
+
+      selectedPlayers = [];
+      document.querySelectorAll('.player-button').forEach(button => {
+        button.classList.remove('selected');
+      });
+      document.getElementById('estrangeiroName').style.display = 'none';
+      teamsDrawn = false;
+
+      // Definir a data máxima como hoje
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('date').value = today;
+      document.getElementById('date').max = today;
+    }
+
+    function addGameToHistory(date, team1, team2, result, setScores) {
+      const gameId = Date.now();
+      gameHistory.unshift({ id: gameId, date, team1, team2, result, setScores });
+      updateGameHistoryDisplay();
+      localStorage.setItem('gameHistory', JSON.stringify(gameHistory));
+    }
+
+    function updatePlayerStats(team1, team2, team1Score, team2Score, setScores) {
+      const allPlayers = [...team1, ...team2];
+      allPlayers.forEach(player => {
+        const playerName = player.startsWith('estrangeiro (') ? 'estrangeiro' : player;
+        if (playerName !== 'estrangeiro'){
+          if (!playerStats[playerName]) {
+            playerStats[playerName] = {
+              wins: 0,
+              draws: 0,
+              losses: 0,
+              setsWon: 0,
+              setsLost: 0,
+              gamesWon: 0,
+              gamesLost: 0,
+              form: [],
+              pote: 0
+            };
+          }
+
+          const isTeam1 = team1.includes(player);
+          const isDraw = team1Score === team2Score;
+
+          if (isDraw) {
+            playerStats[playerName].draws++;
+            playerStats[playerName].form.unshift('D');
+            playerStats[playerName].pote += 2.5;
+          } else if ((isTeam1 && team1Score > team2Score) || (!isTeam1 && team2Score > team1Score)) {
+            playerStats[playerName].wins++;
+            playerStats[playerName].form.unshift('W');
+          } else {
+            playerStats[playerName].losses++;
+            playerStats[playerName].form.unshift('L');
+            playerStats[playerName].pote += 5;
+          }
+
+          setScores.forEach(([score1, score2]) => {
+            if (isTeam1) {
+              playerStats[playerName].setsWon += score1 > score2 ? 1 : 0;
+              playerStats[playerName].setsLost += score1 < score2 ? 1 : 0;
+              playerStats[playerName].gamesWon += score1;
+              playerStats[playerName].gamesLost += score2;
+            } else {
+              playerStats[playerName].setsWon += score2 > score1 ? 1 : 0;
+              playerStats[playerName].setsLost += score2 < score1 ? 1 : 0;
+              playerStats[playerName].gamesWon += score2;
+              playerStats[playerName].gamesLost += score1;
+            }
+          });
+
+          playerStats[playerName].form = playerStats[playerName].form.slice(0, 5);
+        }
+      });
+
+      updateRanking();
+      localStorage.setItem('playerStats', JSON.stringify(playerStats));
+    }
+
+    function updatePairsStats(team1, team2, team1Score, team2Score, setScores) {
+      const updatePairStats = (pair, isWinner, setScores, isTeam1) => {
+        const sortedPair = pair.sort().join(' / ');
+        if (!pairsStats[sortedPair]) {
+          pairsStats[sortedPair] = {
+            wins: 0,
+            draws: 0,
+            losses: 0,
+            setsWon: 0,
+            setsLost: 0,
+            gamesWon: 0,
+            gamesLost: 0,
+            form: []
+          };
+        }
+        
+        const isDraw = team1Score === team2Score;
+
+        if (isDraw) {
+          pairsStats[sortedPair].draws++;
+          pairsStats[sortedPair].form.unshift('D');
+        } else if (isWinner) {
+          pairsStats[sortedPair].wins++;
+          pairsStats[sortedPair].form.unshift('W');
+        } else {
+          pairsStats[sortedPair].losses++;
+          pairsStats[sortedPair].form.unshift('L');
+        }
+
+        setScores.forEach(([score1, score2]) => {
+          if (isTeam1) {
+            pairsStats[sortedPair].setsWon += score1 > score2 ? 1 : 0;
+            pairsStats[sortedPair].setsLost += score1 < score2 ? 1 : 0;
+            pairsStats[sortedPair].gamesWon += score1;
+            pairsStats[sortedPair].gamesLost += score2;
+          } else {
+            pairsStats[sortedPair].setsWon += score2 > score1 ? 1 : 0;
+            pairsStats[sortedPair].setsLost += score2 < score1 ? 1 : 0;
+            pairsStats[sortedPair].gamesWon += score2;
+            pairsStats[sortedPair].gamesLost += score1;
+          }
+        });
+
+        pairsStats[sortedPair].form = pairsStats[sortedPair].form.slice(0, 5);
+      };
+
+      updatePairStats(team1, team1Score > team2Score, setScores, true);
+      updatePairStats(team2, team2Score > team1Score, setScores, false);
+
+      updatePairsRanking();
+      localStorage.setItem('pairsStats', JSON.stringify(pairsStats));
+    }
+
+    function updateHeadToHeadStats(team1, team2, team1Score, team2Score) {
+      const allPlayers = [...new Set([...team1, ...team2])];
+      
+      allPlayers.forEach(player1 => {
+        if (!player1.startsWith('estrangeiro (')) {
+          if(!headToHeadStats[player1]) {
+            headToHeadStats[player1] = {};
+          }
+          
+          allPlayers.forEach(player2 => {
+            if (player1 !== player2 && !player2.startsWith('estrangeiro (')) {
+              if (!headToHeadStats[player1][player2]) {
+                headToHeadStats[player1][player2] = { wins: 0, losses: 0 };
+              }
+              
+              if (team1.includes(player1) && team2.includes(player2)) {
+                if (team1Score > team2Score) {
+                  headToHeadStats[player1][player2].wins++;
+                } else if (team1Score < team2Score) {
+                  headToHeadStats[player1][player2].losses++;
+                }
+              } else if (team2.includes(player1) && team1.includes(player2)) {
+                if (team2Score > team1Score) {
+                  headToHeadStats[player1][player2].wins++;
+                } else if (team2Score < team1Score) {
+                  headToHeadStats[player1][player2].losses++;
+                }
+              }
+            }
+          });
+        }
+      });
+      
+      localStorage.setItem('headToHeadStats', JSON.stringify(headToHeadStats));
+    }
+
+    function updatePairsHeadToHeadStats(team1, team2, team1Score, team2Score) {
+      const pair1 = team1.filter(player => !player.startsWith('estrangeiro (')).sort().join(' / ');
+      const pair2 = team2.filter(player => !player.startsWith('estrangeiro (')).sort().join(' / ');
+
+      if (pair1.includes('/') && pair2.includes('/')) {
+        if (!pairsHeadToHeadStats[pair1]) {
+          pairsHeadToHeadStats[pair1] = {};
+        }
+        if (!pairsHeadToHeadStats[pair2]) {
+          pairsHeadToHeadStats[pair2] = {};
+        }
+
+        if (!pairsHeadToHeadStats[pair1][pair2]) {
+          pairsHeadToHeadStats[pair1][pair2] = { wins: 0, losses: 0 };
+        }
+        if (!pairsHeadToHeadStats[pair2][pair1]) {
+          pairsHeadToHeadStats[pair2][pair1] = { wins: 0, losses: 0 };
+        }
+
+        if (team1Score > team2Score) {
+          pairsHeadToHeadStats[pair1][pair2].wins++;
+          pairsHeadToHeadStats[pair2][pair1].losses++;
+        } else if (team2Score > team1Score) {
+          pairsHeadToHeadStats[pair1][pair2].losses++;
+          pairsHeadToHeadStats[pair2][pair1].wins++;
+        }
+
+        localStorage.setItem('pairsHeadToHeadStats', JSON.stringify(pairsHeadToHeadStats));
+      }
+    }
+
+    function updateGameHistoryDisplay() {
+      const gameHistoryBody = document.getElementById('gameHistoryBody');
+      gameHistoryBody.innerHTML = '';
+      
+      gameHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      gameHistory.forEach((game) => {
+        const row = document.createElement('tr');
+        row.setAttribute('data-game-id', game.id);
+        const [team1Score, team2Score] = game.result.split('-');
+        const isDraw = team1Score === team2Score;
+        
+        let setScoresHtml = game.setScores.map(([score1, score2]) => {
+          const set1Class = score1 > score2 ? 'winner-score' : '';
+          const set2Class = score2 > score1 ? 'winner-score' : '';
+          return `<span class="${set1Class}">${score1}</span>-<span class="${set2Class}">${score2}</span>`;
+        }).join(', ');
+
+        row.innerHTML = `
+          <td>${game.date}</td>
+          <td>${isDraw ? '' : (team1Score > team2Score ? '<i class="fas fa-trophy winner-icon"></i>' : '')}${game.team1.join(' / ')}</td>
+          <td>${isDraw ? '' : (team2Score > team1Score ? '<i class="fas fa-trophy winner-icon"></i>' : '')}${game.team2.join(' / ')}</td>
+          <td>${game.result} (${setScoresHtml})</td>
+          <td><button class="delete-game" data-game-id="${game.id}">Eliminar</button></td>
+        `;
+
+        gameHistoryBody.appendChild(row);
+      });
+
+      document.querySelectorAll('.delete-game').forEach(button => {
+        button.addEventListener('click', function() {
+          const gameId = parseInt(this.getAttribute('data-game-id'));
+          deleteGame(gameId);
+        });
+      });
+    }
+
+    function deleteGame(gameId) {
+      const gameIndex = gameHistory.findIndex(game => game.id === gameId);
+      if (gameIndex !== -1) {
+        const game = gameHistory[gameIndex];
+        const row = document.querySelector(`tr[data-game-id="${gameId}"]`);
+        
+        row.classList.add('fade-out');
+        
+        setTimeout(() => {
+          gameHistory.splice(gameIndex, 1);
+          removeGameStats(game.team1, game.team2, game.result, game.setScores);
+          removePairsStats(game.team1, game.team2, game.result, game.setScores);
+          removeHeadToHeadStats(game.team1, game.team2, game.result);
+          removePairsHeadToHeadStats(game.team1, game.team2, game.result);
+          row.remove();
+          updateRanking();
+          updatePairsRanking();
+          updateHeadToHead();
+          updatePairsHeadToHead();
+          localStorage.setItem('gameHistory', JSON.stringify(gameHistory));
+          localStorage.setItem('playerStats', JSON.stringify(playerStats));
+          localStorage.setItem('pairsStats', JSON.stringify(pairsStats));
+          localStorage.setItem('headToHeadStats', JSON.stringify(headToHeadStats));
+          localStorage.setItem('pairsHeadToHeadStats', JSON.stringify(pairsHeadToHeadStats));
+        }, 500);
+      }
+    }
+
+    function removeGameStats(team1, team2, result, setScores) {
+      const [team1Score, team2Score] = result.split('-').map(Number);
+      const allPlayers = [...team1, ...team2];
+      
+      allPlayers.forEach(player => {
+        const playerName = player.startsWith('estrangeiro (') ? 'estrangeiro' : player;
+        if (playerName !== 'estrangeiro' && playerStats[playerName]) {
+          const isTeam1 = team1.includes(player);
+          const isDraw = team1Score === team2Score;
+
+          if (isDraw) {
+            playerStats[playerName].draws--;
+            playerStats[playerName].pote -= 2.5;
+          } else if ((isTeam1 && team1Score > team2Score) || (!isTeam1 && team2Score > team1Score)) {
+            playerStats[playerName].wins--;
+          } else {
+            playerStats[playerName].losses--;
+            playerStats[playerName].pote -= 5;
+          }
+
+          setScores.forEach(([score1, score2]) => {
+            if (isTeam1) {
+              playerStats[playerName].setsWon -= score1 > score2 ? 1 : 0;
+              playerStats[playerName].setsLost -= score1 < score2 ? 1 : 0;
+              playerStats[playerName].gamesWon -= score1;
+              playerStats[playerName].gamesLost -= score2;
+            } else {
+              playerStats[playerName].setsWon -= score2 > score1 ? 1 : 0;
+              playerStats[playerName].setsLost -= score2 < score1 ? 1 : 0;
+              playerStats[playerName].gamesWon -= score1;
+              playerStats[playerName].gamesLost -= score2;
+            }
+          });
+
+          playerStats[playerName].form.pop();
+        }
+      });
+    }
+
+    function removePairsStats(team1, team2, result, setScores) {
+      const [team1Score, team2Score] = result.split('-').map(Number);
+      const isDraw = team1Score === team2Score;
+
+      const removePairStat = (pair, isWinner, setScores, isTeam1) => {
+        const sortedPair = pair.sort().join(' / ');
+        if (pairsStats[sortedPair]) {
+          if (isDraw) {
+            pairsStats[sortedPair].draws--;
+          } else if (isWinner) {
+            pairsStats[sortedPair].wins--;
+          } else {
+            pairsStats[sortedPair].losses--;
+          }
+
+          setScores.forEach(([score1, score2]) => {
+            if (isTeam1) {
+              pairsStats[sortedPair].setsWon -= score1 > score2 ? 1 : 0;
+              pairsStats[sortedPair].setsLost -= score1 < score2 ? 1 : 0;
+              pairsStats[sortedPair].gamesWon -= score1;
+              pairsStats[sortedPair].gamesLost -= score2;
+            } else {
+              pairsStats[sortedPair].setsWon -= score2 > score1 ? 1 : 0;
+              pairsStats[sortedPair].setsLost -= score2 < score1 ? 1 : 0;
+              pairsStats[sortedPair].gamesWon -= score2;
+              pairsStats[sortedPair].gamesLost -= score1;
+            }
+          });
+
+          pairsStats[sortedPair].form.pop();
+
+          if (pairsStats[sortedPair].wins + pairsStats[sortedPair].draws + pairsStats[sortedPair].losses === 0) {
+            delete pairsStats[sortedPair];
+          }
+        }
+      };
+
+      removePairStat(team1, team1Score > team2Score, setScores, true);
+      removePairStat(team2, team2Score > team1Score, setScores, false);
+    }
+
+    function removeHeadToHeadStats(team1, team2, result) {
+      const [team1Score, team2Score] = result.split('-').map(Number);
+      const allPlayers = [...new Set([...team1, ...team2])];
+
+      allPlayers.forEach(player1 => {
+        if (!player1.startsWith('estrangeiro (') && headToHeadStats[player1]) {
+          allPlayers.forEach(player2 => {
+            if (player1 !== player2 && !player2.startsWith('estrangeiro (') && headToHeadStats[player1][player2]) {
+              if (team1.includes(player1) && team2.includes(player2)) {
+                if (team1Score > team2Score) {
+                  headToHeadStats[player1][player2].wins--;
+                } else if (team1Score < team2Score) {
+                  headToHeadStats[player1][player2].losses--;
+                }
+              } else if (team2.includes(player1) && team1.includes(player2)) {
+                if (team2Score > team1Score) {
+                  headToHeadStats[player1][player2].wins--;
+                } else if (team2Score < team1Score) {
+                  headToHeadStats[player1][player2].losses--;
+                }
+              }
+
+              if (headToHeadStats[player1][player2].wins + headToHeadStats[player1][player2].losses === 0) {
+                delete headToHeadStats[player1][player2];
+              }
+            }
+          });
+
+          if (Object.keys(headToHeadStats[player1]).length === 0) {
+            delete headToHeadStats[player1];
+          }
+        }
+      });
+    }
+
+    function removePairsHeadToHeadStats(team1, team2, result) {
+      const [team1Score, team2Score] = result.split('-').map(Number);
+      const pair1 = team1.filter(player => !player.startsWith('estrangeiro (')).sort().join(' / ');
+      const pair2 = team2.filter(player => !player.startsWith('estrangeiro (')).sort().join(' / ');
+
+      if (pair1.includes('/') && pair2.includes('/') && pairsHeadToHeadStats[pair1] && pairsHeadToHeadStats[pair2]) {
+        if (pairsHeadToHeadStats[pair1][pair2]) {
+          if (team1Score > team2Score) {
+            pairsHeadToHeadStats[pair1][pair2].wins--;
+            pairsHeadToHeadStats[pair2][pair1].losses--;
+          } else if (team2Score > team1Score) {
+            pairsHeadToHeadStats[pair1][pair2].losses--;
+            pairsHeadToHeadStats[pair2][pair1].wins--;
+          }
+
+          if (pairsHeadToHeadStats[pair1][pair2].wins + pairsHeadToHeadStats[pair1][pair2].losses === 0) {
+            delete pairsHeadToHeadStats[pair1][pair2];
+            delete pairsHeadToHeadStats[pair2][pair1];
+          }
+        }
+
+        if (Object.keys(pairsHeadToHeadStats[pair1]).length === 0) {
+          delete pairsHeadToHeadStats[pair1];
+        }
+        if (Object.keys(pairsHeadToHeadStats[pair2]).length === 0) {
+          delete pairsHeadToHeadStats[pair2];
+        }
+      }
+    }
+
+    function updateRanking() {
+      const rankingBody = document.getElementById('rankingBody');
+      rankingBody.innerHTML = '';
+
+      const sortedPlayers = Object.entries(playerStats)
+        .filter(([name, stats]) => name !== 'estrangeiro' && (stats.wins + stats.losses + stats.draws) > 0)
+        .sort((a, b) => {
+          const victoryRateA = (a[1].wins + 0.5 * a[1].draws) / (a[1].wins + a[1].losses + a[1].draws);
+          const victoryRateB = (b[1].wins + 0.5 * b[1].draws) / (b[1].wins + b[1].losses + b[1].draws);
+          return victoryRateB - victoryRateA;
+        });
+
+      let totalPote = 0;
+
+      sortedPlayers.forEach((player, index) => {
+        const [name, stats] = player;
+        const totalGames = stats.wins + stats.losses + stats.draws;
+        const victoryRate = ((stats.wins + 0.5 * stats.draws) / totalGames * 100).toFixed(2);
+        const setsDiff = stats.setsWon - stats.setsLost;
+        const gamesDiff = stats.gamesWon - stats.gamesLost;
+
+        const formHtml = stats.form.map(result => {
+          let className = '';
+          let icon = '';
+          if (result === 'W') {
+            className = 'form-win';
+            icon = '✓';
+          } else if (result === 'D') {
+            className = 'form-draw';
+            icon = '=';
+          } else if (result === 'L') {
+            className = 'form-loss';
+            icon = '✗';
+          }
+          return `<span class="form-indicator ${className}">${icon}</span>`;
+        }).join('');
+
+        totalPote += stats.pote;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${name}</td>
+          <td>${totalGames}</td>
+          <td class="v-rate">${victoryRate}%</td>
+          <td>${stats.wins}</td>
+          <td>${stats.draws}</td>
+          <td>${stats.losses}</td>
+          <td class="hide-mobile">${stats.setsWon}</td>
+          <td class="hide-mobile">${stats.setsLost}</td>
+          <td>${setsDiff > 0 ? '+' : ''}${setsDiff}</td>
+          <td class="hide-mobile">${stats.gamesWon}</td>
+          <td class="hide-mobile">${stats.gamesLost}</td>
+          <td>${gamesDiff > 0 ? '+' : ''}${gamesDiff}</td>
+          <td class="hide-mobile form-column">${formHtml}</td>
+          <td class="pote-value">${stats.pote.toFixed(2)}€</td>
+        `;
+        rankingBody.appendChild(row);
+      });
+
+      document.getElementById('poteTotal').textContent = totalPote.toFixed(2);
+    }
+
+    function updatePairsRanking() {
+      const pairsRankingBody = document.getElementById('pairsRankingBody');
+      pairsRankingBody.innerHTML = '';
+
+      const sortedPairs = Object.entries(pairsStats)
+        .filter(([pair, stats]) => (stats.wins + stats.losses + stats.draws) > 0)
+        .sort((a, b) => {
+          const victoryRateA = (a[1].wins + 0.5 * a[1].draws) / (a[1].wins + a[1].losses + a[1].draws);
+          const victoryRateB = (b[1].wins + 0.5 * b[1].draws) / (b[1].wins + b[1].losses + b[1].draws);
+          return victoryRateB - victoryRateA;
+        });
+
+      sortedPairs.forEach((pair, index) => {
+        const [pairNames, stats] = pair;
+        const totalGames = stats.wins + stats.losses + stats.draws;
+        const victoryRate = ((stats.wins + 0.5 * stats.draws) / totalGames * 100).toFixed(2);
+        const setsDiff = stats.setsWon - stats.setsLost;
+        const gamesDiff = stats.gamesWon - stats.gamesLost;
+
+        const formHtml = stats.form.map(result => {
+          let className = '';
+          let icon = '';
+          if (result === 'W') {
+            className = 'form-win';
+            icon = '✓';
+          } else if (result === 'D') {
+            className = 'form-draw';
+            icon = '=';
+          } else if (result === 'L') {
+            className = 'form-loss';
+            icon = '✗';
+          }
+          return `<span class="form-indicator ${className}">${icon}</span>`;
+        }).join('');
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${pairNames}</td>
+          <td>${totalGames}</td>
+          <td class="v-rate">${victoryRate}%</td>
+          <td>${stats.wins}</td>
+          <td>${stats.draws}</td>
+          <td>${stats.losses}</td>
+          <td class="hide-mobile">${stats.setsWon}</td>
+          <td class="hide-mobile">${stats.setsLost}</td>
+          <td>${setsDiff > 0 ? '+' : ''}${setsDiff}</td>
+          <td class="hide-mobile">${stats.gamesWon}</td>
+          <td class="hide-mobile">${stats.gamesLost}</td>
+          <td>${gamesDiff > 0 ? '+' : ''}${gamesDiff}</td>
+          <td class="hide-mobile form-column">${formHtml}</td>
+        `;
+        pairsRankingBody.appendChild(row);
+      });
+    }
+
+    function updateHeadToHead() {
+      const headToHeadHeader = document.getElementById('headToHeadHeader');
+      const headToHeadBody = document.getElementById('headToHeadBody');
+      headToHeadHeader.innerHTML = `
+        <tr>
+          <th>Jogador</th>
+          ${Object.keys(headToHeadStats).map(player => `<th>${player}</th>`).join('')}
+        </tr>
+      `;
+      headToHeadBody.innerHTML = '';
+
+      Object.keys(headToHeadStats).forEach(player1 => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${player1}</td>
+          ${Object.keys(headToHeadStats).map(player2 => {
+            if (player1 === player2) {
+              return '<td>-</td>';
+            } else if (headToHeadStats[player1][player2]) {
+              const wins = headToHeadStats[player1][player2].wins;
+              const losses = headToHeadStats[player1][player2].losses;
+              return `<td>${wins}-${losses}</td>`;
+            } else {
+              return '<td>0-0</td>';
+            }
+          }).join('')}
+        `;
+        headToHeadBody.appendChild(row);
+      });
+    }
+
+    function updatePairsHeadToHead() {
+      const pairsHeadToHeadHeader = document.getElementById('pairsHeadToHeadHeader');
+      const pairsHeadToHeadBody = document.getElementById('pairsHeadToHeadBody');
+      const allPairs = Object.keys(pairsHeadToHeadStats);
+
+      pairsHeadToHeadHeader.innerHTML = `
+        <tr>
+          <th>Dupla</th>
+          ${allPairs.map(pair => `<th>${pair}</th>`).join('')}
+        </tr>
+      `;
+      pairsHeadToHeadBody.innerHTML = '';
+
+      allPairs.forEach(pair1 => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${pair1}</td>
+          ${allPairs.map(pair2 => {
+            if (pair1 === pair2) {
+              return '<td>-</td>';
+            } else if (pairsHeadToHeadStats[pair1] && pairsHeadToHeadStats[pair1][pair2]) {
+              const wins = pairsHeadToHeadStats[pair1][pair2].wins;
+              const losses = pairsHeadToHeadStats[pair1][pair2].losses;
+              return `<td>${wins}-${losses}</td>`;
+            } else {
+              return '<td>0-0</td>';
+            }
+          }).join('')}
+        `;
+        pairsHeadToHeadBody.appendChild(row);
+      });
+    }
+
+    // Load data from localStorage on page load
+    window.addEventListener('load', () => {
+      const savedGameHistory = localStorage.getItem('gameHistory');
+      const savedPlayerStats = localStorage.getItem('playerStats');
+      const savedPairsStats = localStorage.getItem('pairsStats');
+      const savedHeadToHeadStats = localStorage.getItem('headToHeadStats');
+      const savedPairsHeadToHeadStats = localStorage.getItem('pairsHeadToHeadStats');
+      const savedPlayers = localStorage.getItem('players');
+
+      if (savedGameHistory) {
+        gameHistory = JSON.parse(savedGameHistory);
+        updateGameHistoryDisplay();
+      }
+      if (savedPlayerStats) {
+        playerStats = JSON.parse(savedPlayerStats);
+        updateRanking();
+      }
+      if (savedPairsStats) {
+        pairsStats = JSON.parse(savedPairsStats);
+        updatePairsRanking();
+      }
+      if (savedHeadToHeadStats) {
+        headToHeadStats = JSON.parse(savedHeadToHeadStats);
+        updateHeadToHead();
+      }
+      if (savedPairsHeadToHeadStats) {
+        pairsHeadToHeadStats = JSON.parse(savedPairsHeadToHeadStats);
+        updatePairsHeadToHead();
+      }
+      if (savedPlayers) {
+        players = JSON.parse(savedPlayers);
+      }
+
+      updatePlayerButtons();
+
+      // Set the default date to today
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('date').value = today;
+      document.getElementById('date').max = today;
+    });
+  </script>
+</body>
+</html>
